@@ -1,0 +1,1306 @@
+/* TESTS OUF'TIM */
+
+USE ouf_tim
+
+/* PEUPLEMENT SECONDAIRE PAR EXECUTION DE PROCEDURES */
+-------------------------------------------------------
+/*L2 ATIC 2013 GROUPE ouf_tim						 */
+/*BdD ouf_tim										 */
+/*PREMIER GROUPE DE TESTS							 */
+/*Auteur(s): SANDRA LADURANTI						 */
+/*Intégrateur: SANDRA LADURANTI						 */
+--------------------------------------------------------
+/* Test de la procédure unitaire de Distinctions_creer */
+USE ouf_tim
+GO
+EXEC Distinction_creer
+	@Nom='Palme d''Or',
+	@Lieu='Cannes',
+	@Annee=2012
+
+SELECT * FROM Distinctions WHERE Nom = 'Palme d''Or'
+
+/* Test de la procédure unitaire de compte_creer */
+USE ouf_tim
+GO
+EXEC Compte_creer
+	@Numero_bancaire = '4785145200347855',
+	@Montant = 55,
+	@Somme_operations=0
+
+SELECT * FROM Compte WHERE Numero_bancaire = '4785145200347855'
+	
+/* Test de la procédure unitaire de Type_abonnement_creer */
+USE ouf_tim
+GO
+EXEC Type_abonnement_creer
+	@Nom = 'Pauvre',
+	@Prix = 10,
+	@Prix_location = 1,
+	@Exemplaires_simultanes = 3,
+	@Prix_retard = 1,
+	@Duree_engagement = 72
+
+SELECT * FROM Type_abonnement WHERE Nom = 'Pauvre'
+
+/* Test de la procédure unitaire de Abonnement_creer */
+USE ouf_tim
+GO
+Declare @creation DATETIME
+SET @creation = CURRENT_TIMESTAMP;
+Declare @expi DATETIME
+SET @expi = @creation + '20:00:00';
+
+EXEC Abonnement_creer
+	@Date_creation=@creation,
+	@Date_expiration=@expi,
+	@FK_numcompte=7,
+	@FK_type_abonnement ='Premium'
+
+SELECT * FROM Abonnement WHERE FK_numcompte = 7 AND FK_type_abonnement = 'Premium';
+
+/* Test de la procédure unitaire de Edition_creer */
+USE ouf_tim
+GO
+Declare @inser DATETIME
+SET @inser = CURRENT_TIMESTAMP;
+EXEC Edition_creer
+	@Nom='Introuvable',
+	@Annee_de_sortie=2013,
+	@Duree_film =120,
+	@limite_age=10,
+    @Support = 'Bluray' ,
+    @Date_insertion = @inser,
+    @Type_couleur ='Couleur',
+    @Type_son='5.1',
+    @FK_titre= 'Intouchables',
+    @FK_complement_titre = ''
+
+SELECT * FROM Edition WHERE Nom='Introuvable' AND FK_titre='Intouchables';
+
+/* Test de la procédure charindex d'insertion_edition */
+USE "ouf_tim"
+GO
+Declare @inser DATETIME
+SET @inser = CURRENT_TIMESTAMP;
+
+USE ouf_tim
+GO
+DECLARE @FK_titre NVARCHAR(50) = 'Gladiator',
+		@FK_complement_titre NVARCHAR(50)='',
+		@Nom NVARCHAR(50) = 'Empire Vision',
+		@Annee_de_sortie INT = 2012,
+		@Duree_film INT = 130,
+		@limite_age INT = 16,
+		@support NVARCHAR(50)= 'DVD',
+		@Dinsertion DATETIME = CURRENT_TIMESTAMP,
+		@Tcouleur NVARCHAR(50)='Couleur',
+		@Tson NVARCHAR(50)='Dolby',
+		@liste_Langue_audio NVARCHAR(1000) = 'Francais|Chinois|Anglais',
+		@liste_Langue_sous_titre NVARCHAR(1000)= 'Francais|Chinois|Anglais',
+		@nombreEx INT = 4
+		
+EXEC dbo.Inserer_edition @FK_titre, @FK_complement_titre, @Nom, @Annee_de_sortie, @Duree_film, @limite_age, @support, @Dinsertion, @Tcouleur, @Tson, @liste_Langue_audio, @liste_Langue_sous_titre, @nombreEx
+
+SELECT * FROM Edition WHERE Nom = 'Empire Vision' AND FK_titre = 'Gladiator' AND FK_complement_titre = ''
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 4
+-- SELECT * FROM Langue_audio
+-- SELECT * FROM Langue_sous_titre
+
+/* Test de la procédure charindex d'insertion_edition */
+USE "ouf_tim"
+GO
+Declare @inser DATETIME
+SET @inser = CURRENT_TIMESTAMP;
+
+USE ouf_tim
+GO
+DECLARE @FK_titre NVARCHAR(50) = 'X-Men',
+		@FK_complement_titre NVARCHAR(50)='Le Commencement',
+		@Nom NVARCHAR(50) = 'Extended',
+		@Annee_de_sortie INT = 2011,
+		@Duree_film INT = 150,
+		@limite_age INT = 12,
+		@support NVARCHAR(50)= 'DVD',
+		@Dinsertion DATETIME = CURRENT_TIMESTAMP,
+		@Tcouleur NVARCHAR(50)='Couleur',
+		@Tson NVARCHAR(50)='5.1',
+		@liste_Langue_audio NVARCHAR(1000) = 'Francais|Anglais|Finnois',
+		@liste_Langue_sous_titre NVARCHAR(1000)= 'Francais|Anglais|Finnois',
+		@nombreEx INT = 6
+		
+EXEC dbo.Inserer_edition @FK_titre, @FK_complement_titre, @Nom, @Annee_de_sortie, @Duree_film, @limite_age, @support, @Dinsertion, @Tcouleur, @Tson, @liste_Langue_audio, @liste_Langue_sous_titre, @nombreEx
+
+SELECT * FROM Edition WHERE Nom = 'Extended' AND FK_titre = 'X-Men' AND FK_complement_titre = 'Le Commencement'
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 5
+
+/* Test de la procédure unitaire d'Exemplaires_creer */
+
+USE "ouf_tim"
+GO
+EXEC Exemplaire_creer
+	@num_edition= 1
+	
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 1 AND Date_approvisionnement = '2007-02-10';
+
+USE "ouf_tim"
+GO
+EXEC Exemplaire_creer
+	@num_edition= 2
+	
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 2 AND Date_approvisionnement = '2012-08-10';
+
+USE "ouf_tim"
+GO
+EXEC Exemplaire_creer
+	@num_edition= 3
+
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 3 AND Date_approvisionnement = '2006-10-12';
+
+USE "ouf_tim"
+GO
+EXEC Exemplaire_creer
+	@num_edition= 4
+
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 4 AND Date_approvisionnement = '2011-11-11';
+
+USE "ouf_tim"
+GO
+EXEC Exemplaire_creer
+	@num_edition= 5
+
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 5 AND Date_approvisionnement = '2012-12-12';
+
+/* Test de la procédure charindex d'insertion_film */
+USE ouf_tim
+GO
+DECLARE @Titre NVARCHAR(50) = 'Machinous',
+		@Complement_titre NVARCHAR(50)='bidulous',
+		@Annee INT = 2013,
+		@Nationalite NVARCHAR (50)= 'Dalek',
+		@Duree INT = 42,
+		@liste_acteurs NVARCHAR(1000)= 'jeannette,elise,1995-12-12,madame,1997-12-12,noobette,lol,france|jeannetta,sandra,1995-12-12,madame,1997-12-12,pommedeterre,lol,france',
+		@liste_realisateurs NVARCHAR(500)= 'jeannette,elise,1995-12-12,madame,1997-12-12,noobette,france|jeannetta,sandra,1995-12-12,madame,1997-12-12,pommedeterre,france',
+		@liste_distinctions NVARCHAR(500)='Cesar,paris,2000|Oscar,berlin,2002',
+		@liste_genres NVARCHAR(100)='Obiwan|Kenobi'
+		
+EXEC dbo.Ajouter_film @Titre, @Complement_titre, @Annee, @Nationalite, @Duree, @liste_acteurs, @liste_realisateurs, @liste_distinctions, @liste_genres 
+
+SELECT * FROM Films WHERE Titre = 'Machinous' AND Complement_titre = 'bidulous'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Jeannette' AND FK_prenom_acteur = 'Elise' AND FK_titre_film = 'Machinous'
+SELECT * FROM Realiser WHERE FK_nom_real = 'Jeannette' AND FK_prenom_real = 'Elise' AND FK_titre_film = 'Machinous'
+SELECT * FROM Distinctions WHERE Nom = 'Cesar' OR Nom = 'Oscar'
+SELECT * FROM Genre WHERE Nom = 'Obiwan' OR Nom = 'Kenobi'
+
+USE ouf_tim
+GO
+DECLARE @Titre NVARCHAR(50) = 'Hunger Games',
+		@Complement_titre NVARCHAR(50)='1',
+		@Annee INT = 2012,
+		@Nationalite NVARCHAR (50)= 'Americaine',
+		@Duree INT = 42,
+		@liste_acteurs NVARCHAR(MAX)= 'Lawrence,Jennifer,1995-12-12,madame,null,jenni,actrice americaine,Américaine|Hutcherson,Josh,1992-10-12,monsieur,null,joshi,acteur,Américain',
+		@liste_realisateurs NVARCHAR(MAX)= 'Ross,Gary,1956-11-03,monsieur,null,Cinéaste,france',
+		@liste_distinctions NVARCHAR(MAX)= 'Golden Globes, Los Angeles,2013|MTV Movie Awards,Los Angeles,2012',
+		@liste_genres NVARCHAR(MAX)= 'Action|Drame|Science fiction'
+		 
+EXEC dbo.Ajouter_film @Titre, @Complement_titre, @Annee, @Nationalite, @Duree, @liste_acteurs, @liste_realisateurs, @liste_distinctions, @liste_genres 
+
+SELECT * FROM Films WHERE Titre = 'Hunger Games' AND Complement_titre = '1'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Lawrence' AND FK_prenom_acteur = 'Jennifer' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Realiser WHERE FK_nom_real = 'Ross' AND FK_prenom_real = 'Gary' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Distinctions WHERE Nom = 'Golden Globes' OR Nom = 'MTV Movie Awards'
+SELECT * FROM Genre WHERE Nom = 'Action' OR Nom = 'Drame' OR Nom = 'Science fiction'
+
+USE ouf_tim
+GO
+DECLARE @Titre NVARCHAR(50) = 'Hunger Games',
+		@Complement_titre NVARCHAR(50)='L''embrasement',
+		@Annee INT = 2013,
+		@Nationalite NVARCHAR (50)= 'Americaine',
+		@Duree INT = 42,
+		@liste_acteurs NVARCHAR(MAX)= 'Lawrence,Jennifer,1995-12-12,madame,null,jenni,actrice americaine,Américaine|Hutcherson,Josh,1992-10-12,monsieur,null,joshi,acteur,Américain',
+		@liste_realisateurs NVARCHAR(MAX)= 'Lawrence,Francis,1971-03-26,monsieur,null,Realise des clips,Americain',
+		@liste_distinctions NVARCHAR(MAX)= '',
+		@liste_genres NVARCHAR(MAX)= 'Action|Drame|Science fiction'
+		
+EXEC dbo.ajouter_film @Titre, @Complement_titre, @Annee, @Nationalite, @Duree, @liste_acteurs, @liste_realisateurs, @liste_distinctions, @liste_genres 
+
+SELECT * FROM Films WHERE Titre = 'Hunger Games' AND Complement_titre = 'l''embrasement'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Lawrence' AND FK_prenom_acteur = 'Jennifer' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Realiser WHERE FK_nom_real = 'Lawrence' AND FK_prenom_real = 'Francis' AND FK_titre_film = 'Hunger Games'
+
+USE "ouf_tim"
+GO
+Declare @inser DATETIME
+SET @inser = CURRENT_TIMESTAMP;
+
+GO
+DECLARE @FK_titre NVARCHAR(50) = 'Hunger Games',
+		@FK_complement_titre NVARCHAR(50)='1',
+		@Nom NVARCHAR(50) = 'Gold',
+		@Annee_de_sortie INT = 2013,
+		@Duree_film INT = 150,
+		@limite_age INT = 12,
+		@support NVARCHAR(50)= 'DVD',
+		@Dinsertion DATETIME = CURRENT_TIMESTAMP,
+		@Tcouleur NVARCHAR(50)='Couleur',
+		@Tson NVARCHAR(50)='5.1',
+		@liste_Langue_audio NVARCHAR(1000) = 'Francais|Anglais|Finnois|Polonais',
+		@liste_Langue_sous_titre NVARCHAR(1000)= 'Francais|Anglais|Finnois|Polonais',
+		@nombreEx INT = 6
+		
+EXEC dbo.Inserer_edition @FK_titre, @FK_complement_titre, @Nom, @Annee_de_sortie, @Duree_film, @limite_age, @support, @Dinsertion, @Tcouleur, @Tson, @liste_Langue_audio, @liste_Langue_sous_titre, @nombreEx
+
+SELECT * FROM Edition WHERE Nom = 'Gold' AND FK_titre = 'Hunger Games' AND FK_complement_titre = '1'
+
+USE "ouf_tim"
+GO
+Declare @inser DATETIME
+SET @inser = CURRENT_TIMESTAMP;
+
+GO
+DECLARE @FK_titre NVARCHAR(50) = 'Hunger Games',
+		@FK_complement_titre NVARCHAR(50)='L''embrasement',
+		@Nom NVARCHAR(50) = 'Gold',
+		@Annee_de_sortie INT = 2013,
+		@Duree_film INT = 150,
+		@limite_age INT = 12,
+		@support NVARCHAR(50)= 'DVD',
+		@Dinsertion DATETIME = CURRENT_TIMESTAMP,
+		@Tcouleur NVARCHAR(50)='Couleur',
+		@Tson NVARCHAR(50)='5.1',
+		@liste_Langue_audio NVARCHAR(1000) = 'Francais|Anglais|Finnois|Polonais',
+		@liste_Langue_sous_titre NVARCHAR(1000)= 'Francais|Anglais|Finnois|Polonais',
+		@nombreEx INT = 6
+		
+EXEC dbo.Inserer_edition @FK_titre, @FK_complement_titre, @Nom, @Annee_de_sortie, @Duree_film, @limite_age, @support, @Dinsertion, @Tcouleur, @Tson, @liste_Langue_audio, @liste_Langue_sous_titre, @nombreEx
+
+SELECT * FROM Edition WHERE Nom = 'Gold' AND FK_titre = 'Hunger Games' AND FK_complement_titre = 'L''embrasement'
+
+/* TESTS DES PROCEDURES EN SIMULATION D'IHM */
+
+-------------------------------------------------------
+/*L2 ATIC 2013 GROUPE ouf_tim						 */
+/*BdD ouf_tim										 */
+/*SECOND GROUPE DE TESTS							 */
+/*Auteur(s): SANDRA LADURANTI						 */
+/*Intégrateur: SANDRA LADURANTI						 */
+--------------------------------------------------------
+/* TEST 1 - PRESENTATION DES PROCEDURES PAR SANDRA LADURANTI */
+
+/* un abonné s'inscrit */
+
+USE "ouf_tim"
+GO
+EXEC Abonne_creer
+    @Nom = 'Bochard',
+    @Prenom = 'Stephanie',
+    @Pseudo = 'Steph',
+    @Date_de_naissance = '1990-07-21',
+    @Sexe = 'Madame',
+    @Numero_de_voie = '25',
+    @Complement_de_voie = '',
+    @Type_de_voie = 'rue',
+    @Libelle = 'des papillons',
+    @Complement_libelle = '',
+    @Code_postal = '91800',
+    @Ville = 'Brunoy',
+    @Cedex = '',
+    @Pays = 'France',
+    @Numero_telephone = '0666666666',
+    @Adresse_email = 'stephanie.bochard@gmail.com'
+
+SELECT * FROM ABONNE WHERE Nom = 'Bochard' AND Prenom = 'Stephanie' AND Pseudo = 'Steph'
+
+/* L'abonné a la tête dans les nuages et tente de se réinscrire*/
+
+USE "ouf_tim"
+GO
+EXEC Abonne_creer
+    @Nom = 'Bochard',
+    @Prenom = 'Stephanie',
+    @Pseudo = 'Steph',
+    @Date_de_naissance = '1990-07-21',
+    @Sexe = 'Madame',
+    @Numero_de_voie = '25',
+    @Complement_de_voie = '',
+    @Type_de_voie = 'rue',
+    @Libelle = 'des papillons',
+    @Complement_libelle = '',
+    @Code_postal = '91800',
+    @Ville = 'Brunoy',
+    @Cedex = '',
+    @Pays = 'France',
+    @Numero_telephone = '0666666666',
+    @Adresse_email = 'stephanie.bochard@gmail.com'
+
+SELECT * FROM ABONNE WHERE Nom = 'Bochard'
+
+/* L'abonné prends un abonnement Premium en précisant son numéro bancaire */
+/* afin de créer un nouveau compte pour son nouvel abonnement */
+USE ouf_tim
+GO
+EXEC dbo.rattacher_abonne
+    @Nom = 'Bochard',
+    @Prenom ='Stephanie' ,
+    @Pseudo = 'Steph',
+    @Type_abonnement = 'Premium',  
+    @num_compte = '1785145200347844',
+    @numeroAbonnement = 0
+    
+	SELECT * FROM Compte WHERE Numero_bancaire = '1785145200347844'
+	SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Bochard'
+
+/* L'abonné approvisionne son compte*/
+USE "ouf_tim"
+GO
+EXEC approvisionner_compte
+    @num_compte = 11,
+    @montant = '250'
+
+SELECT * FROM Compte WHERE Numero_compte = 11
+
+/*TEST 2 - PRESENTATION DES PROCEDURES PAR SANDRA LADURANTI */
+
+/*Procedure de test sur la modification d'un abonne  */
+
+/* Fonctionnement de la modification d'un abonné:  */
+/* si vous ne changez pas une de vos infos alors   */
+/* rentrez '_' pour un NVARCHAR et 0 pour un int   */
+/* sinon rentrez votre élément					   */
+
+/* Presentation de l'abonné avant la maj */
+SELECT * FROM Abonne WHERE Nom = 'Bochard' AND Prenom = 'Stephanie'
+SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Bochard'AND FK_prenom = 'Stephanie'
+
+/* Stephanie se marie à Veres elle change donc de nom	  */
+/* Il y a donc modification de la clé primaire		 	  */
+/* Stephanie déménage également	dans le sud de la France  */
+USE "ouf_tim"
+GO
+EXEC maj_abonne
+	@Ancien_nom = 'Bochard',
+	@Ancien_prenom = 'Stephanie',
+	@Ancien_pseudo = 'Steph',
+	
+	@Nouveau_nom = 'Veres',
+	@Nouveau_prenom = 'Stephanie',
+	@Nouveau_pseudo = 'Steph',
+	@Nouveau_sexe = '_' ,
+	@Nouveau_Numero_voie  = '_',
+	@Nouveau_Complement_de_voie = '_' ,
+	@Nouveau_Type_de_voie= '_' ,
+	@Nouveau_Libelle = '_',
+	@Nouveau_Complement_libelle = '_' ,
+	@Nouveau_Code_postal= '3100'  ,
+	@Nouveau_Ville = 'Toulouse' ,
+	@Nouveau_Cedex = '_',
+	@Nouveau_Pays = '_',
+	@Nouveau_Numero_telephone = '_' ,
+	@Nouveau_Adresse_email= '_' 
+
+SELECT * FROM Abonne WHERE Nom = 'Veres' AND Prenom = 'Stephanie'
+SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Veres' AND FK_prenom = 'Stephanie'
+
+/*TEST 3 - PRESENTATION DES PROCEDURES PAR SANDRA LADURANTI */
+/*Procedure de test familiale					     */
+
+/* Sullivan Veres, le mari de Stephanie, s'inscrit */
+
+USE "ouf_tim"
+GO
+EXEC Abonne_creer
+    @Nom = 'Veres',
+    @Prenom = 'Sullivan',
+    @Pseudo = 'Sully',
+    @Date_de_naissance = '1987-07-14',
+    @Sexe = 'Monsieur',
+    @Numero_de_voie = '25',
+    @Complement_de_voie = '',
+    @Type_de_voie = 'rue',
+    @Libelle = 'des papillons',
+    @Complement_libelle = '',
+    @Code_postal = '3100',
+    @Ville = 'Toulouse',
+    @Cedex = '',
+    @Pays = 'France',
+    @Numero_telephone = '0642424242',
+    @Adresse_email = 'sullivanveres@gmail.com'
+
+SELECT * FROM ABONNE WHERE Nom = 'Veres' AND Prenom = 'Sullivan'
+
+
+/* Sullivan prends un abonnement Familiale */
+USE ouf_tim
+GO
+EXEC dbo.rattacher_abonne
+    @Nom = 'Veres',
+    @Prenom ='Sullivan' ,
+    @Pseudo = 'Sully',
+    @Type_abonnement = 'Familiale',  
+    @num_compte = '1785695200347842',
+    @numeroAbonnement = 0
+    
+	SELECT * FROM Compte WHERE Numero_bancaire = '1785695200347842'
+	SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Veres' AND FK_prenom = 'Sullivan'
+	SELECT * FROM Abonnement WHERE Numero_abonnement = 9
+
+/* Stephanie veut rejoindre l'abonnement familiale de son mari */
+USE ouf_tim
+GO
+EXEC dbo.rattacher_abonne
+    @Nom = 'Veres',
+    @Prenom ='Stephanie' ,
+    @Pseudo = 'Steph',
+    @Type_abonnement = 'Familiale',  
+    @num_compte = '1785695200347842',
+    @numeroAbonnement = 9
+    
+	SELECT * FROM Compte WHERE Numero_bancaire = '1785695200347842'
+	SELECT * FROM Souscrire WHERE FK_num_abonnement = 9
+	SELECT * FROM Abonnement WHERE Numero_abonnement = 9
+	
+/*TEST 4 - PRESENTATION DES PROCEDURES PAR ALEXANDRE TSVETKOV */
+
+/* Stephanie a envie de louer un film */
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 6,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+
+/* On sait que Stephanie n'est pas trés douée en informatique */
+/* Elle relance donc par mégarde l'action */
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 6,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+
+/* L'abonné retourne son film  en retard*/
+
+USE "ouf_tim"
+GO
+Declare @retour DATETIME
+SET @retour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+	@Date_retour = @retour ,
+	@FK_num_location =  4,
+	@FK_num_abonnement = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT * FROM Retour_location WHERE FK_num_location = 4
+SELECT * FROM Compte WHERE Numero_bancaire = '1785145200347844'
+
+
+/*TEST 5 - PRESENTATION DES PROCEDURES PAR ALEXANDRE TSVETKOV */
+
+/* Test du TRIGGER 'declencheur_suppression_exemplaire_use'  */
+
+
+/* Test du TRIGGER 'declencheur_suppression_exemplaire_use'		  */
+/* après passage du taux d'usure d'un dvd à son taux max autorisé */
+/* pour le tester notre abonné va relouer le film plusieurs fois  */
+/* car le film il est trop bien									  */
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 6,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+
+USE "ouf_tim"
+GO
+Declare @retour DATETIME
+SET @retour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+	@Date_retour = @retour ,
+	@FK_num_location =  5,
+	@FK_num_abonnement = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT * FROM Retour_location WHERE FK_num_location = 5
+SELECT Taux_usure FROM Exemplaires WHERE Numero_exemplaire = 6
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 6,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT Taux_usure FROM Exemplaires WHERE Numero_exemplaire = 6
+
+USE "ouf_tim"
+GO
+Declare @retour DATETIME
+SET @retour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+	@Date_retour = @retour ,
+	@FK_num_location =  6,
+	@FK_num_abonnement = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT * FROM Retour_location WHERE FK_num_location = 6
+SELECT Numero_exemplaire, Taux_usure, Supprimer FROM Exemplaires WHERE Numero_exemplaire = 6
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 6,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT Taux_usure FROM Exemplaires WHERE Numero_exemplaire = 6
+
+
+/* lors de ce dernier retour le numéro d'usure va passer à 5 et le trigger va se déclencher */
+/* Pour passer la variable 'supprimer' à 2 qui est le statut de suppression					*/
+USE "ouf_tim"
+GO
+Declare @retour DATETIME
+SET @retour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+	@Date_retour = @retour ,
+	@FK_num_location =  7,
+	@FK_num_abonnement = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 6
+SELECT * FROM Retour_location WHERE FK_num_location = 7
+SELECT Numero_exemplaire, Taux_usure, Supprimer FROM Exemplaires WHERE Numero_exemplaire = 6
+
+/*Stephanie veut verifier qu'elle a bien rendu tout ses exemplaires */
+USE "ouf_tim"
+GO
+EXEC Situation_abonne
+	@Nom = 'Veres',
+	@Prenom = 'Stephanie',
+	@Pseudo = 'Steph'
+
+/*TEST 6 - PRESENTATION DES PROCEDURES PAR ALEXANDRE TSVETKOV */
+
+/* Test du TRIGGER 'declencheur_suppression_relance_decouvert'  */
+/* et 'declencheur_relance_decouvert'						    */
+
+
+/* Le compte est à 0euros et rend une location*/
+/*Une relance va être lancée*/ 
+
+--Test insere_location
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+  @Num_exem = 1,
+  @Num_abo = 4
+SELECT * FROM Locations WHERE FK_num_abonnement = 4
+SELECT * FROM Abonnement WHERE FK_numcompte = 4
+SELECT * FROM Compte WHERE Numero_compte = 4
+
+--Test retour_location
+/* On constatera après l'execution le déclenchement du trigger     */
+/* créant une relance sur le compte qui vient de passer en négatif */
+USE "ouf_tim"
+GO
+DECLARE @Dretour DATETIME
+SET @Dretour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+    @Date_retour = @Dretour,
+    @FK_num_location = 8,
+    @FK_num_abonnement = 4
+    
+SELECT * FROM Retour_location WHERE FK_num_location = 8
+
+/* REAPPROVISIONNEMENT DU COMPTE */
+
+/* L'utilisateur se trompe et ne réapprovisionne pas assez le compte */
+/* Le trigger se déclenche mais ne créée pas une nouvelle relance	 */
+
+USE "ouf_tim"
+GO
+EXEC approvisionner_compte
+    @num_compte = 4,
+    @montant = '1'
+
+SELECT * FROM Compte WHERE Numero_compte = 4
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 4
+
+/*L'utilisateur met un peu plus d'argent, le trigger se redeclenche pour */
+/* pour supprimer la relance */
+USE "ouf_tim"
+GO
+EXEC approvisionner_compte
+    @num_compte = 4,
+    @montant = '10'
+
+SELECT * FROM Compte WHERE Numero_compte = 4
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 4
+
+/*TEST 7 - PRESENTATION DES PROCEDURES PAR ELISE BROCHEN */
+
+/*Procedure de test sur la modification d'un film    */
+
+/* on insére en premier lieu un film, cependant le gestionnaire */
+/* se trompe en tappant le nom et l'année */
+
+USE ouf_tim
+GO
+DECLARE @Titre NVARCHAR(50) = 'RRRrrrrb!!!',
+		@Complement_titre NVARCHAR(50)='',
+		@Annee INT = 2001,
+		@Nationalite NVARCHAR (50)= 'Française',
+		@Duree INT = 98,
+		@liste_acteurs NVARCHAR(1000)= 'Rouve,Jean-Paul,1967-01-26,monsieur,null, JP, acteur des robin des bois,france|Depardieu,Gérard,1948-12-27,monsieur,null,gerarou,française,france',
+		@liste_realisateurs NVARCHAR(500)= 'Chabat ,Alain,1958-11-24,monsieur,null,français,france',
+		@liste_distinctions NVARCHAR(500)='',
+		@liste_genres NVARCHAR(100)='Comédie'
+		
+EXEC dbo.ajouter_film @Titre, @Complement_titre, @Annee, @Nationalite, @Duree, @liste_acteurs, @liste_realisateurs, @liste_distinctions, @liste_genres 
+   
+/*TEST 8 - PRESENTATION DES PROCEDURES PAR MICKAEL GOUALARD */  
+
+/* présentation des tables avant execution de la modification des elements du film */
+/* pour ne pas changer un element taper '_' pour un varchar et 0 pour un int */
+
+SELECT * FROM Films	WHERE Titre = 'RRRrrrrb!!!'
+SELECT * FROM Jouer WHERE FK_titre_film = 'RRRrrrrb!!!'
+SELECT * FROM Realiser WHERE FK_titre_film = 'RRRrrrrb!!!'
+
+/* correction de RRRrrrrb!!! en RRRrrrr!!!*/
+USE "ouf_tim"
+GO
+EXEC maj_film
+	@Ancien_titre = 'RRRrrrrb!!!',
+	@Ancien_comp_titre = '',
+	
+	@Nouveau_titre = 'RRRrrrr!!!',
+	@Nouveau_comp_titre = '_',
+	@Nouveau_annee = 2004,
+	@Nouveau_nationalite = '_',
+	@Nouveau_duree = 0
+
+-- Select pour voir que la modification a bien été effectuée sur
+-- Films, Jouer, Realiser, Attribuer, Edition
+SELECT * FROM Films	WHERE Titre = 'RRRrrrr!!!'
+SELECT * FROM Jouer WHERE FK_titre_film = 'RRRrrrr!!!'
+SELECT * FROM Realiser WHERE FK_titre_film = 'RRRrrrr!!!'
+
+/*Procedure de test sur la modification d'une edition	*/
+
+
+-- Pour ne rien modifier on saisi '_' quand c'est un VARCHAR et 0 quand c'est un int
+
+/* Présentation de l'édition avant modification */
+SELECT * FROM Edition WHERE Numero_edition = 1
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 1
+
+/* on corrige l'edition qui n'avait pas le bon Nom ni le bon support*/
+USE "ouf_tim"
+GO
+EXEC maj_edition
+	 @Num_edition = 1,
+	 @Nouveau_Nom = 'GOLDI',
+     @Nouveau_Annee_de_sortie = 0,
+     @Nouveau_Duree_film = 0,
+     @Nouveau_limite_age = 0,
+     @Nouveau_Support = 'DVD',
+     @Nouveau_Type_couleur = '_',
+     @Nouveau_Type_son = '_'
+     
+SELECT * FROM Edition WHERE Numero_edition = 1
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 1
+
+
+-------------------------------------------------------
+/*L2 ATIC 2013 GROUPE ouf_tim						 */
+/*BdD ouf_tim										 */
+/*TROISIEME GROUPE DE TESTS							 */
+/*Auteur(s): BROCHEN ELISE							 */
+/*Intégrateur: SANDRA LADURANTI						 */
+-------------------------------------------------------
+
+/*TEST 9 - PRESENTATION DES PROCEDURES PAR PATRICK POL */
+
+/*Procedure de test sur la suppression d'un abonne   	*/
+
+/* un nouvel abonné s'inscrit */
+USE "ouf_tim"
+GO
+EXEC Abonne_creer
+    @Nom = 'Durand',
+    @Prenom = 'Pierre',
+    @Pseudo = 'PierreD',
+    @Date_de_naissance = '1979-10-19',
+    @Sexe = 'Monsieur',
+    @Numero_de_voie = '10',
+    @Complement_de_voie = '',
+    @Type_de_voie = 'avenue',
+    @Libelle = 'Jean Jaurès',
+    @Complement_libelle = '',
+    @Code_postal = '75019',
+    @Ville = 'Paris',
+    @Cedex = '',
+    @Pays = 'France',
+    @Numero_telephone = '0612121212',
+    @Adresse_email = 'pierre.durand@yahoo.com'
+
+SELECT * FROM ABONNE WHERE Nom = 'Durand' AND Prenom = 'Pierre' AND Pseudo = 'PierreD'
+
+
+/* L'abonné prends un abonnement Pauvre en précisant son numéro bancaire */
+/* afin de créer un nouveau compte pour son nouvel abonnement */
+USE ouf_tim
+GO
+EXEC dbo.rattacher_abonne
+    @Nom = 'Durand',
+    @Prenom = 'Pierre',
+    @Pseudo = 'PierreD',
+    @Type_abonnement = 'Pauvre',  
+    @num_compte = '1785177700347844',
+    @numeroAbonnement = 0
+    
+	SELECT * FROM Compte WHERE Numero_bancaire = '1785177700347844'
+	SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Durand' AND FK_prenom = 'Pierre' AND FK_pseudo = 'PierreD'
+
+/* L'abonné approvisionne son compte*/
+USE "ouf_tim"
+GO
+EXEC approvisionner_compte
+	@num_compte = 10,
+    @montant = '15'
+
+SELECT * FROM Compte WHERE Numero_bancaire = '1785177700347844'
+
+/*Pierre est aussi enseignant et désire profiter de l'offre Scolaire */
+USE "ouf_tim"
+GO	
+EXEC dbo.rattacher_abonne
+	@Nom = 'Durand',
+    @Prenom = 'Pierre',
+    @Pseudo = 'PierreD',
+    @Type_abonnement = 'Scolaire',  
+    @num_compte = '1785122200347844',
+    @numeroAbonnement = 0
+    
+SELECT * FROM Compte WHERE Numero_bancaire = '1785122200347844'
+SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Durand'
+
+/* Pierre a envie de louer un film pour lui et un second pour son prochain cours */
+
+--Dans un premier temps, on rectrouve son numéro de compte pour utiliser son numéro d'abonné
+SELECT Numero_compte FROM Compte WHERE Numero_bancaire = '1785122200347844'
+SELECT Numero_compte FROM Compte WHERE Numero_bancaire = '1785177700347844'
+SELECT * FROM Abonnement WHERE FK_numcompte = 14
+SELECT * FROM Abonnement WHERE FK_numcompte = 13
+
+USE "ouf_tim"	 
+GO
+EXEC Inserer_location
+	@Num_exem = 1,
+	@Num_abo = 10
+	
+USE "ouf_tim"	 
+GO
+EXEC Inserer_location
+	@Num_exem = 2,
+	@Num_abo = 11
+	
+SELECT * FROM Locations WHERE FK_exemplaire = 2
+
+
+/* Pierre va retourner ses locations en retard */
+/*Sur son compte relié à l'abonnement Scolaire on constatera après l'execution le déclenchement du trigger*/
+/*créant une relance sur le compte qui vient de passer en négatif */
+
+--Pierre rend sa location personelle
+USE "ouf_tim"
+GO
+DECLARE @Dretour DATETIME
+SET @Dretour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+    @Date_retour = @Dretour,
+    @FK_num_location = 9,
+    @FK_num_abonnement = 10
+   
+SELECT * FROM Retour_location WHERE FK_num_location = 9
+
+--Pierre rend sa location scolaire 
+USE "ouf_tim"
+GO
+DECLARE @Dretour DATETIME
+SET @Dretour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+    @Date_retour = @Dretour,
+    @FK_num_location = 10,
+    @FK_num_abonnement = 11
+    
+SELECT * FROM Retour_location WHERE FK_num_location = 10
+
+/*Pierre n'a toujours pas réapprovisionné son compte*/
+/* Des mises à jour concerant son retard de paiement sont lancées*/
+
+--Test sur tache de fond radiation pour decouvert
+USE "ouf_tim"
+GO
+EXEC maj_relance_decouvert;
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 14
+
+USE "ouf_tim"
+GO
+EXEC maj_relance_decouvert;
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 14
+
+USE "ouf_tim"
+GO
+EXEC maj_relance_decouvert;
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 14
+
+USE "ouf_tim"
+GO
+EXEC maj_relance_decouvert;
+SELECT * FROM Relance_decouvert WHERE FK_numero_compte = 14
+
+--Test sur tache de fond nettoyage abonne	
+USE "ouf_tim"
+GO
+EXEC Nettoyage_abonne 
+
+SELECT Nom, Prenom, Pseudo, Raison, Commentaire FROM Ancien_abonne WHERE Pseudo = 'PierreD'
+SELECT * FROM Abonne WHERE Pseudo = 'PierreD'
+	
+
+/*TEST 10 - PRESENTATION DES PROCEDURES PAR PATRICK POL*/
+
+/*Test pour connaitre l'approche d'expiration de l'abonnement	*/
+
+/*Pour renouveller sa fidélisation le vidéo club aimerait savoir quels abonnements arrivent à expiration */
+USE "ouf_tim" 
+GO
+EXEC Compte_creer
+	@Numero_bancaire = '4678580005630915',
+	@Montant = 1000,
+	@Somme_operations = 0
+SELECT * FROM Compte WHERE Numero_bancaire = '4678580005630915'
+
+USE "ouf_tim"
+GO
+Declare @inser DATETIME2
+SET @inser = '2012-11-30 00:00:00';
+Declare @expi DATETIME2
+SET @expi = '2013-11-30 00:00:00';
+EXEC Abonnement_creer
+   @Date_creation = @inser,
+   @Date_expiration = @expi,
+   @FK_numcompte = 15,
+   @FK_type_abonnement = 'Premium'
+
+USE "ouf_tim"
+GO
+EXEC Souscrire_creer 
+	@FK_nom_abonne = 'Serin',
+	@FK_prenom = 'Damien',
+	@FK_pseudo = 'Daminoumiaou',
+	@FK_num_abonnement = 12
+   
+SELECT * FROM Abonnement WHERE Numero_abonnement = 12
+SELECT * FROM Compte WHERE Numero_compte = 15
+
+USE "ouf_tim"
+GO
+EXEC etat_abonnement
+
+ /*Damien décide d'annuler son abonnement pour partir vivre en Australie */
+/*On procède à la supression de l'abonné */
+USE "ouf_tim"
+GO
+EXEC Suppression_abonne 
+	@Nom_sup = 'Serin',
+	@Prenom_sup = 'Damien',
+	@Pseudo_sup = 'Daminoumiaou'
+
+--Test sur tache de fond nettoyage abonne	
+USE "ouf_tim"
+GO
+EXEC Nettoyage_abonne 
+
+SELECT * FROM Abonne WHERE Pseudo = 'Daminoumiaou'
+SELECT Nom, Prenom, Pseudo, Raison, Commentaire FROM Ancien_abonne WHERE Pseudo = 'Daminoumiaou'
+SELECT * FROM Compte WHERE Numero_compte = 15
+SELECT * FROM Abonnement WHERE Numero_abonnement = 12 
+
+
+/*TEST 11 - PRESENTATION DES PROCEDURES PAR ELISE BROCHEN */
+
+/*Test sur tache de fond pour retard */
+
+/* Creattion d'un abonné depuis le peuplement initial */
+USE "ouf_tim" 
+GO
+EXEC Compte_creer
+	@Numero_bancaire = '4678581235630220',
+	@Montant = 100,
+	@Somme_operations = 0
+SELECT * FROM Compte WHERE Numero_bancaire = '4678581235630220'
+
+USE "ouf_tim"
+GO
+Declare @inser DATETIME2
+SET @inser = '2012-12-30 00:00:00';
+Declare @expi DATETIME2
+SET @expi = '2013-12-30 00:00:00';
+EXEC Abonnement_creer
+   @Date_creation = @inser,
+   @Date_expiration = @expi,
+   @FK_numcompte = 16,
+   @FK_type_abonnement = 'Pauvre'
+
+USE "ouf_tim"
+GO
+EXEC Souscrire_creer 
+	@FK_nom_abonne = 'Roman',
+	@FK_prenom = 'Alexander',
+	@FK_pseudo = 'ARC',
+	@FK_num_abonnement = 13
+   
+SELECT * FROM Abonnement WHERE Numero_abonnement = 13
+
+
+/* Alexander décide d'effectuer une location -> retard */
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+	@num_exem = 4,
+	@num_abo = 13
+	
+EXEC relance_retard
+SELECT * FROM Relance_retards WHERE FK_num_location = 11
+
+EXEC maj_relance_retard
+SELECT * FROM Relance_retards WHERE FK_num_location = 11
+
+/* Test permettant la vérification qu'une édition d'un même film ne peut être louée qu'une seule fois*/
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+	@num_exem = 5,
+	@num_abo = 13
+	
+SELECT * FROM Locations WHERE FK_num_abonnement = 13 AND FK_exemplaire = 5
+
+		
+/* Après avoir lu ses messages, Alexander rend sa location*/
+USE "ouf_tim"
+GO
+DECLARE @Dretour DATETIME
+SET @Dretour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+    @Date_retour = @Dretour,
+    @FK_num_location = 12,
+    @FK_num_abonnement = 13
+    
+/* Alexander décide de reserver sa prochaine location */
+USE "ouf_tim"
+GO
+EXEC Reservation_immediate_creer
+	 @num_abonnement = 13,
+     @num_edition = 1
+
+SELECT * FROM Exemplaires WHERE FK_numero_edition = 2
+
+/* Alexander s'est trompé et décide donc d'annuler sa réservation */
+USE "ouf_tim"
+GO
+DECLARE @Dannul DATETIME
+SET @Dannul = CURRENT_TIMESTAMP;
+EXEC annulation_reservation_imm_creer
+	@HD_annulation = @Dannul,
+	@FK_num_reservation =1 ,
+	@FK_num_abonnement = 13
+
+SELECT * FROM Reservation_immediate WHERE Numero_reservation = 1
+
+/* L'abonné effectue à nouveau sa reservation sans se tromper cette fois-ci ! */
+USE "ouf_tim"
+GO
+EXEC Reservation_immediate_creer
+	 @num_abonnement = 13,
+     @num_edition = 2
+     
+SELECT * FROM Reservation_immediate WHERE FK_num_abonnement = 13 AND Etat = 'En cours'
+     
+/* L'abonné va recuperer sa reservation qui passe en location */
+USE "ouf_tim"
+GO
+EXEC Location_resa_imm
+	@FK_num_abonnement = 13,
+	@FK_num_exemplaire = 15,
+	@FK_num_reservation_imm = 2
+	
+SELECT * FROM Locations WHERE FK_num_abonnement = 13 AND FK_exemplaire = 15
+
+/* Retour de la location */
+USE "ouf_tim"
+GO
+DECLARE @Dretour DATETIME
+SET @Dretour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+    @Date_retour = @Dretour,
+    @FK_num_location = 13,
+    @FK_num_abonnement = 13
+
+/* Alexander très friand de locations décide d'utiliser le service de livraison */
+USE "ouf_tim"
+GO
+EXEC Reservation_livraison_creer
+	@num_abonnement = 13,
+    @num_edition = 5
+    
+SELECT * FROM Reservation_Livraison WHERE FK_num_abonnement = 13
+
+/* Finalement Alexander préfere un autre film et annule donc sa livraison */
+USE "ouf_tim"
+GO
+DECLARE @Dannul DATETIME
+SET @Dannul = CURRENT_TIMESTAMP;
+EXEC annulation_livraison_creer
+	@HD_annulation = @Dannul,
+	@FK_num_reservation = 1,
+	@FK_num_abonnement = 13
+SELECT * FROM Reservation_Livraison
+
+
+/* L'abonné effectue à nouveau la reservation qu'il voulait */
+USE "ouf_tim"
+GO
+EXEC Reservation_livraison_creer
+	@num_abonnement = 13,
+    @num_edition = 6
+   
+SELECT * FROM Reservation_Livraison WHERE FK_num_abonnement = 13
+
+/*Nous allons pouvoir preparer son colis */
+USE "ouf_tim"
+GO
+EXEC maj_reservation_liv
+
+	
+-------------------------------------------------------
+/*L2 ATIC 2013 GROUPE ouf_tim						 */
+/*BdD ouf_tim										 */
+/*QUATRIEME GROUPE DE TESTS							 */
+/*Auteur(s): SANDRA LADURANTI						 */
+/*Intégrateur: SANDRA LADURANTI						 */
+
+--------------------------------------------------------
+
+/*TEST 12 - PRESENTATION DES PROCEDURES PAR MICKAEL GOUALARD */
+/*Test sur la maj d'un réalisateur et acteur 		 */
+
+USE "ouf_tim"
+GO
+EXEC maj_realisateur
+	@Ancien_nom = 'Scott',
+	@Ancien_prenom = 'Ridley',
+	@Ancien_DN = '1937-12-12',
+	
+	@Nouveau_nom = '_',
+	@Nouveau_prenom = '_',
+	@Nouveau_DN = '_',
+	@Nouveau_Sexe = 'Monsieur' ,
+	@Nouveau_Date_deces = '_',
+	@Nouveau_Biographie ='_',
+	@Nouveau_Nationalite = '_'
+SELECT * FROM Realisateur WHERE Nom='Scott' AND Prenom = 'Ridley' AND Date_naissance = '1937-12-12' 
+SELECT * FROM Realiser WHERE FK_nom_real = 'Scott' 
+
+
+EXEC Jouer_creer 
+	@FK_titre_film = 'Machinous',
+	@FK_complement_titre = 'bidulous',
+	@FK_nom_acteur = 'Berry',
+	@FK_prenom_acteur = 'Halle',
+	@FK_date_de_naissance_acteur = '1966-10-12'
+	
+
+USE "ouf_tim"
+GO
+EXEC maj_acteur
+	@Ancien_nom = 'Berry',
+	@Ancien_prenom = 'Halle',
+	@Ancien_DN = '1966-10-12',
+	
+	@Nouveau_nom = '_',
+	@Nouveau_prenom = 'Claude',
+	@Nouveau_DN = '_',
+	@Nouveau_Sexe = '_' ,
+	@Nouveau_Date_deces = '2000-01-19',
+	@Nouveau_Nom_de_scene = 'CocoP',
+	@Nouveau_Biographie ='_',
+	@Nouveau_Nationalite = '_'
+	
+SELECT * FROM acteur WHERE Nom='Berry' AND Prenom = 'Claude' AND Date_naissance = '1966-10-12' 
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Berry' AND FK_prenom_acteur = 'Claude' 
+
+
+/*TEST 13 - PRESENTATION DES PROCEDURES PAR MICKAEL GOUALARD */
+
+/*Test sur la suppression d'un film			 		 */
+
+/* George le propriétaire du magasin de location a regardé Hunger Games 2 */
+/* il trouve que c'est très nul et veux donc supprimer la possibilité	  */
+/* de louer ce film en le supprimant lui et tout ses exemplaires		  */
+
+/* Cependant Stephanie aime les mauvaises adaptations de livres elle va donc */
+/* louer un exemplaire														 */
+
+USE "ouf_tim"
+GO
+EXEC Inserer_location
+@Num_exem = 27,
+@Num_abo = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 27
+
+/* Dans la base nous avons Jennifer Lawrence qui ne joue que dans les deux */
+/* Hunger Games, il ne faut cependant pas la supprimer car nous ne supprimons */
+/* pas le premier film. */
+/* De même Stephanie ayant reservé un exemplaire la suppression ne devrait pas */
+/* pouvoir s'effectuer totalement. */
+
+SELECT * FROM Acteur WHERE Nom = 'Lawrence' AND Prenom = 'Jennifer'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Lawrence' AND FK_prenom_acteur = 'Jennifer' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Films WHERE Titre = 'Hunger Games' AND Complement_titre = 'L''embrasement'
+
+/* Pour un chaque table un tuple 'Supprimer' indique le statut de chaque élément,							 */
+/* 0 signale que l'element n'est pas supprimé, 1 qu'il est en attente de suppression, 2 qu'il a été supprimé */
+
+USE "ouf_tim"
+GO
+EXEC dbo.supprimer_film
+    @Titre = 'Hunger Games',
+    @Complement_titre = 'L''embrasement'
+
+SELECT * FROM Acteur WHERE Nom = 'Lawrence' AND Prenom = 'Jennifer'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Lawrence' AND FK_prenom_acteur = 'Jennifer' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Films WHERE Titre = 'Hunger Games' AND Complement_titre = 'L''embrasement'
+
+/* On nous signale que l'on ne peut pas supprimer complétement le film puisque un exemplaire est encore loué */
+
+/* Stephanie ramène son exemplaire */
+
+USE "ouf_tim"
+GO
+Declare @retour DATETIME
+SET @retour = CURRENT_TIMESTAMP;
+EXEC retour_location_creer
+	@Date_retour = @retour ,
+	@FK_num_location =  16,
+	@FK_num_abonnement = 8
+
+SELECT * FROM Locations WHERE FK_exemplaire = 27
+SELECT * FROM Retour_location WHERE FK_num_location = 8
+
+/* un trigger vient de se déclencher pour verifier si l'exemplaire ramené concernait un film en court de suppression */
+/* Si l'exemplaire ramené était le dernier manquant alors on supprime totalement le film */
+
+SELECT * FROM Acteur WHERE Nom = 'Lawrence' AND Prenom = 'Jennifer'
+SELECT * FROM Jouer WHERE FK_nom_acteur = 'Lawrence' AND FK_prenom_acteur = 'Jennifer' AND FK_titre_film = 'Hunger Games'
+SELECT * FROM Films WHERE Titre = 'Hunger Games' AND Complement_titre = 'L''embrasement'
+
+
+/*TEST 14 - PRESENTATION DES PROCEDURES PAR PATRICK POL */
+
+/* Nous sommes la fin du mois, notre tache de fond s'enclenche afin de supprimer */
+/* tous les abonnés qui n'ont pas pris d'abonnement */
+USE "ouf_tim" 
+EXEC Suppression_abonne_sans_abonnement
+
+/* On insére nos abonnées inactif dans la table ancien_abonne */
+
+EXEC Nettoyage_abonne 
+SELECT * FROM Ancien_abonne
+
+/*Test de Radiation pour retard */
+-- Un nouvel abonné s'inscrit
+
+USE "ouf_tim"
+GO
+EXEC Abonne_creer
+    @Nom = 'Dupont',
+    @Prenom = 'Jean',
+    @Pseudo = 'JeanD',
+    @Date_de_naissance = '1979-10-19',
+    @Sexe = 'Monsieur',
+    @Numero_de_voie = '10',
+    @Complement_de_voie = '',
+    @Type_de_voie = 'avenue',
+    @Libelle = 'Jean Dupont',
+    @Complement_libelle = '',
+    @Code_postal = '75020',
+    @Ville = 'Paris',
+    @Cedex = '',
+    @Pays = 'France',
+    @Numero_telephone = '0612121213',
+    @Adresse_email = 'dupont.jean@gmail.com'
+
+SELECT * FROM ABONNE WHERE Nom = 'Dupont' AND Prenom = 'Jean' AND Pseudo = 'JeanD'
+
+/* L'abonné prends un abonnement Pauvre en précisant son numéro bancaire */
+/* afin de créer un nouveau compte pour son nouvel abonnement */
+USE ouf_tim
+GO
+EXEC dbo.rattacher_abonne
+    @Nom = 'Dupont',
+    @Prenom = 'Jean',
+    @Pseudo = 'JeanD',
+    @Type_abonnement = 'Premium',  
+    @num_compte = '1785177700257844',
+    @numeroAbonnement = 0
+    
+	SELECT * FROM Compte WHERE Numero_bancaire = '1785177700257844'
+	SELECT * FROM Souscrire WHERE FK_nom_abonne = 'Dupont'
+
+/* L'abonné approvisionne son compte*/
+USE "ouf_tim"
+GO
+EXEC approvisionner_compte
+	@num_compte = 10,
+    @montant = '100'
+
+SELECT * FROM Compte WHERE Numero_bancaire = '1785177700257844'
+
+/* Jean décide de prendre une location */
+
+EXEC Inserer_location 
+	@Num_exem = 5,
+	@Num_abo = 14
+	
+SELECT * FROM Locations WHERE FK_num_abonnement = 14 AND FK_exemplaire = 5
+
+/* Malheureusement Jean a oublié qu'il avait une location et est donc en retard */
+/* Jean pensant à autre chose va finir par atteindre le niveau de retard maximum autorisé */
+/* Jean va être radié */
+EXEC Relance_retard 
+SELECT * FROM Relance_retards WHERE FK_num_location = 17
+
+/* Jean pensant à autre chose va finir par atteindre le niveau de retard maximum autorisé */
+/* Jean va être radié */
+
+/* On éxécute 4 fois maj_relance_retard */
+EXEC Maj_relance_retard 
+SELECT * FROM Relance_retards WHERE FK_num_location = 17
+
+EXEC Nettoyage_abonne
+SELECT Nom, Prenom, Pseudo , Raison , Commentaire  FROM Ancien_abonne WHERE Pseudo = 'JeanD'
+SELECT * FROM Abonne WHERE Pseudo = 'JeanD'
+
+
+SELECT * FROM Ancien_abonne
