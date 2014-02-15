@@ -1,0 +1,318 @@
+--------------------------------------------------------------------------- 
+/* L2 ATIC 2013 – Groupe < ouf_tim > */ 
+/* BdD < ouf_tim > */ 
+/* Création de la table < ouf_tim > */ 
+/* Auteur(s) : BROCHEN Elise, GOUALARD Mickael, POL Patrick, Hua Lucien, Tseksov Alexandre*/ 
+/* Testeur(s) : LADURANTI Sandra */ 
+/* Intégrateur(s) : LADURANTI Sandra */ 
+--------------------------------------------------------------------------- 
+
+USE ouf_tim
+
+insert into FILMS 
+values ('Gladiator','',2000,'USA',155,0); 
+insert into FILMS 
+values ('Terminator','1',1984,'USA',107,0); 
+insert into FILMS 
+values ('Star Wars','La Menace Fantôme',1999,'USA',130,0); 
+insert into FILMS 
+values ('Star Wars','L''Attaque des Clones',2002,'USA',136,0); 
+insert into FILMS 
+values ('Star Wars','La Revanche Des Sites Web',2005,'USA',140,0); 
+insert into FILMS 
+values ('X-Men','Le Commencement',2011,'USA',132,0); 
+insert into FILMS 
+values ('Intouchables','',2011,'France',113,0); 
+insert into FILMS 
+values ('The Artist','',2011,'France',100,0); 
+insert into FILMS 
+values ('Asterix & Obelix','Mission Cléopatre',2002,'France',107,0); 
+insert into FILMS 
+values ('The Hobbit','La désolation de Smaug',2013,'USA',165,0); 
+insert into Films
+values ('Thor','Le monde des ténébres', 2013,'USA',130,0);
+insert into Films
+values ('Avenger','2', 2013,'USA',130,0);
+
+insert into GENRE
+values ('Péplum');
+insert into GENRE
+values ('Comédie');
+insert into GENRE
+values ('Action');
+insert into GENRE
+values ('Film pour enfants');
+insert into GENRE
+values ('Fantastique');
+insert into GENRE
+values ('Science-fiction');
+insert into GENRE
+values ('Mélodrame');
+insert into GENRE
+values ('Arts Martiaux');
+insert into GENRE
+values ('Autobiographique');
+insert into GENRE
+values ('Aventure');
+insert into GENRE
+values ('Bolywood');
+insert into GENRE
+values ('Musical');
+
+insert into APPARTENIR
+values (0,'Gladiator','','Péplum');
+insert into APPARTENIR
+values (0,'Terminator','1','Péplum');
+insert into APPARTENIR
+values (0,'Star Wars','La Menace Fantôme','Science-fiction');
+insert into APPARTENIR
+values (0,'Star Wars','L''Attaque des Clones','Science-fiction'); 
+insert into APPARTENIR
+values (0,'Star Wars','La Revanche Des Sites Web','Science-fiction'); 
+insert into APPARTENIR
+values (0,'X-Men','Le Commencement','Science-fiction'); 
+insert into APPARTENIR
+values (0,'Intouchables','','Comédie'); 
+insert into APPARTENIR
+values (0,'The Artist','','Comédie'); 
+insert into APPARTENIR
+values (0,'Asterix & Obelix','Mission Cléopatre','Comédie'); 
+insert into APPARTENIR
+values (0,'The Hobbit','La désolation de Smaug','Fantastique');
+
+insert into ACTEUR
+values ('Crowe','Russell','1964-02-10','Monsieur','','Rusty','','Néo-zélandaise/Australiene',0);
+insert into ACTEUR
+values ('Ford','Harrison','1942-03-13','Monsieur','','','','Américaine',0);
+insert into ACTEUR
+values ('Jackman','Hugh','1968-06-07','Monsieur','','','','Australienne',0);
+insert into ACTEUR
+values ('Portman','Natalie','1981-10-12','Madame','','','','Américaine',0);
+insert into ACTEUR
+values ('McGregor','Ewan','1971-12-05','Monsieur','','','','Britannique',0);
+insert into ACTEUR
+values ('Berry','Halle','1966-10-12','Madame','','','','Américaine',0);
+
+insert into JOUER
+values (0,'Gladiator','','Crowe','Russell','1964-02-10');
+insert into JOUER
+values (0,'Star Wars','La Menace Fantôme','Portman','Natalie','1981-10-12');
+insert into JOUER
+values (0,'Star Wars','La Revanche Des Sites Web','Ford','Harrison','1942-03-13');
+
+insert into REALISATEUR
+values ('Scott','Ridley','1937-12-12','Monsieur',null,'Ridley Scott étudie au West Hartpool College of Art et au Royal College of Art de Londres...','Britannique',0);
+insert into REALISATEUR
+values ('Jackson','Peter','1961-02-06','Monsieur',null,'','Néo-Zélandaise',0);
+
+insert into REALISER
+values (0,'Gladiator','','Scott','Ridley','1937-12-12');
+
+insert into DISTINCTIONS
+values('Meilleur Film','73e cérémonie des oscars du cinéma à Los Angeles',2001,0);
+insert into DISTINCTIONS
+values('Ours d''or','un ours en or',2008,0);
+
+
+insert into ATTRIBUER
+values (0,'Gladiator','','Meilleur Film','73e cérémonie des oscars du cinéma à Los Angeles',2001);
+insert into ATTRIBUER
+values (0,'Star Wars','La Menace Fantôme','Ours d''or','un ours en or',2008);
+
+
+insert into COMPTE
+values ( '4785145212347869', 300, 0, 0)
+insert into COMPTE
+values ( '4785145212347823', 0, 0, 0)
+insert into COMPTE
+values ('4785145269347999', 100, 0, 0)
+insert into COMPTE
+values ('41851565200347823', 0, 0, 0)
+insert into COMPTE
+values ('4785145200347800', 99, 3, 0)
+insert into COMPTE
+values ('4785145200347811', -200, 0, 0)
+insert into COMPTE
+values ('4785145200347822', 88, 1, 0)
+insert into COMPTE
+values ('4785145200347833', 33, 0, 0)
+insert into COMPTE
+values ('4785145200347844', -44, 0, 0)
+
+
+insert into RELANCE_DECOUVERT (Niveau_decouvert, Date_creation, Date_mise_a_jour, FK_numero_compte)
+values(2,'2013-02-10 23:42:59','2013-02-11 22:05:10',6);
+insert into RELANCE_DECOUVERT (Niveau_decouvert, Date_creation, Date_mise_a_jour, FK_numero_compte)
+values(3,'2013-11-12 20:50:59','2013-12-12 21:08:10',9);
+
+insert into ABONNE
+values ('AIT Ahmed', 'Kamel', 'KamelA', '1992-01-01', 'Monsieur', '14', null, 'boulevard', 'du Dome', null, '75015', 'Paris', null, 'France', '0669453218', 'kamel.ait.ahmed@gmail.com',0);
+insert into ABONNE
+values ('Amri', 'Zakaria', 'ZakariaA', '1992-02-02', 'Monsieur', '24', null, 'rue', 'saint-martin', null, '75001', 'Paris', null, 'France', '0664751823', 'amri.zakaria@gmail.com',0);
+insert into ABONNE
+values ('Baskaramoorthy', 'Anusan','AnusanB', '1992-03-03', 'Monsieur', '37', null, 'rue', 'saint-georges', null, '75002', 'Paris', null, 'France', '0667451823', 'baskaramoothy.anusan@gmail.com',0);
+insert into ABONNE
+values ('Brochen', 'Elise','EliseB', '1992-04-04', 'Madame', '3', null, 'rue', 'saint-claude', null, '75003', 'Paris', null, 'France', '0663114752', 'brochen.elise@gmail.com',0); 
+insert into ABONNE
+values ('Danglet', 'Eric', 'EricD', '1992-05-05', 'Monsieur', '17', null, 'rue', 'saint-patrick', null, '75004', 'Paris', null, 'France', '0675451823', 'danglet.eric@gmail.com',0);
+insert into ABONNE
+values ('El Khazzar', 'Aimad', 'AimadEK', '1992-06-06', 'Monsieur', '19', null, 'rue', 'saint-marcel', null, '75005', 'Paris', null, 'France', '0678123456', 'alkhazzar.aimad@gmail.com',0);
+insert into ABONNE
+values ('Ghansum', 'Nourdine', 'NourdineG', '1992-07-07', 'Monsieur', '33', null, 'rue', 'saint-bernad', null, '75006', 'Paris', null, 'France', '0784321529', 'ghansum.nourdine@gmail.com',0);
+insert into ABONNE
+values ('Goualard', 'Mickael', 'Zebrada', '1992-08-08', 'Monsieur', '88', null, 'rue', 'saint-jacques', null, '75007', 'Paris', null, 'France', '0645751859', 'goualard.mickael@gmail.com',0);
+insert into ABONNE
+values ('Hamyani', 'Yasmina', 'YasminaH', '1992-10-10', 'Madame', '56',null, 'rue', 'saint-jean', null, '75009', 'Paris', null, 'France', '0645451813', 'hamyani.yasmina@gmail.com',0);
+insert into ABONNE
+values ('Ifrah', 'Eliahou Raphael', 'ElihouIf', '1992-12-12', 'Monsieur', '30',null, 'boulevard', 'saint-ploutre', null,'75011', 'Paris', null, 'France', '0623416578', 'ifrah.eliahou@gmail.com',0);
+insert into ABONNE
+values ('Laduranti', 'Sandra', 'PatateMasquee', '1991-12-30', 'Madame', '10', null, 'rue', 'patate douce',null, '75012', 'Paris', null, 'France', '0645187823', 'laduranti.sandra@gmail.com',0);
+insert into ABONNE
+values ('Loutfi', 'Ibouroihim', 'LoutfiI', '1992-01-12', 'Monsieur', '13', null, 'rue', 'saint-pizza',null, '75013', 'Paris', null, 'France', '0645859674', 'loutfi.ibouroihim@gmail.com',0);
+insert into ABONNE
+values ('Nasser', 'Ashraf', 'AshrafN', '1992-06-14', 'Monsieur', '14', null, 'rue', 'saint-kebab',null, '75014', 'Paris', null, 'France', '0612457896', 'nasser.ashraf@gmail.com',0);
+insert into ABONNE
+values ('Negro Castro', 'Lucas', 'LucasNC', '1992-01-20', 'Monsieur', '27', null, 'rue', 'de la musique',null,'75015', 'Paris', null, 'France', '0645783625', 'negrocastro.lucas@gmail.com',0); 
+insert into ABONNE
+values ('Petit', 'Clément', 'ClémentP', '1992-06-15', 'Monsieur', '36', null, 'rue', 'de la vie', null, '75016', 'Paris', null, 'France', '0636451285', 'petit.clement@gmail.com',0);
+insert into ABONNE
+values ('Piard-rousseau', 'Idriss', 'GRODEBILE', '1992-04-16', 'Monsieur', '95', null, 'rue', 'saint-pascale', null, '75017', 'Paris', null, 'France', '0632659814', 'piardrousseau.idriss@gmail.com',0);
+insert into ABONNE
+values ('Pol', 'Patrick', 'PatrickP', '1992-01-13', 'Monsieur', '84',null, 'boulevard', 'chinois', null, '75013', 'Paris', null, 'France', '0646215896', 'pol.patrick@gmail.com',0);
+insert into ABONNE
+values ('Roman', 'Alexander', 'ARC', '1991-02-05', 'Monsieur', '157', null, 'rue', 'du lapin', null, '78000', 'Versailles',null, 'France', '0645856525', 'roman.alexander@gmail.com',0);
+insert into ABONNE
+values ('Serin', 'Damien', 'Daminoumiaou', '1991-11-12', 'Monsieur', '102', null, 'rue', 'du renouveau', null, '75019','Paris', null, 'France', '0623142536', 'serin.damien@gmail.com',0);
+insert into ABONNE
+values ('Sivanathan', 'Sinthujan', 'SinthujanS', '1992-05-11', 'Monsieur', '80', null, 'rue', 'de lafievre', null, '75020','Paris', null, 'France', '0666415278', 'sivanathan.sinthujan@gmail.com',0);
+insert into ABONNE
+values ('Tsvetkov', 'Alexandre', 'AlexandreT', '1992-06-04', 'Monsieur', '45', null, 'rue', 'du vodka', null, '75001','Paris', null, 'France', '0642152536', 'tsvetkov.alexandre@gmail.com',0);
+
+
+--TYPE ABONNEMENT
+insert into TYPE_ABONNEMENT
+values ('Familiale', 60, 2, 5, 1,30);
+insert into TYPE_ABONNEMENT
+values ('Premium', 120, 4, 2, 1,30);
+insert into TYPE_ABONNEMENT
+values ('Scolaire', 80, 3, 8, 2,30);
+
+-- ABONNEMENT
+
+insert into ABONNEMENT
+values ('2013-10-30 23:00:00','2025-10-30 23:00:00',1,'Familiale',0)
+insert into ABONNEMENT
+values ('2012-11-20','2015-11-30',2,'Premium',0)
+insert into ABONNEMENT
+values ('2012-12-20','2015-12-30',3,'Scolaire',0)
+insert into ABONNEMENT
+values ('2007-07-20','2014-10-30',4,'Familiale',0)
+insert into ABONNEMENT
+values ('2008-08-20','2014-10-30',5,'Scolaire',0)
+insert into ABONNEMENT
+values ('2008-06-20','2014-11-30',6,'Premium',0)
+
+insert into SOUSCRIRE
+values (0,'Amri', 'Zakaria', 'ZakariaA',1);
+insert into SOUSCRIRE
+values (0,'Baskaramoorthy', 'Anusan','AnusanB',2);
+insert into SOUSCRIRE
+values (0,'Brochen', 'Elise','EliseB',3);
+
+
+insert into LANGUE_AUDIO
+values ('francais');
+insert into LANGUE_AUDIO 
+values ('Anglais'); 
+insert into LANGUE_AUDIO 
+values('Russe'); 
+insert into LANGUE_AUDIO 
+values ('Espagnol'); 
+insert into LANGUE_AUDIO 
+values ('Portugais'); 
+insert into LANGUE_AUDIO 
+values ('Italien'); 
+insert into LANGUE_AUDIO 
+values ('Mandarin'); 
+insert into LANGUE_AUDIO 
+values ('Cantonais'); 
+insert into LANGUE_AUDIO 
+values ('Muet');
+
+insert into LANGUE_SOUS_TITRE
+values ('francais');
+insert into LANGUE_SOUS_TITRE
+values ('Anglais');
+insert into LANGUE_SOUS_TITRE
+values('Russe');
+insert into LANGUE_SOUS_TITRE
+values ('Espagnol');
+insert into LANGUE_SOUS_TITRE
+values ('Portugais');
+insert into LANGUE_SOUS_TITRE
+values ('Italien');
+insert into LANGUE_SOUS_TITRE
+values ('Mandarin');
+insert into LANGUE_SOUS_TITRE
+values('Cantonais');
+insert into LANGUE_SOUS_TITRE
+values ('Allemand');
+insert into LANGUE_SOUS_TITRE
+values ('Vietnamien');
+insert into LANGUE_SOUS_TITRE
+values ('Finnois');
+
+-- Edition
+
+insert into Edition
+values ('GOLD', 2004, 120, 12, 'VHS', '2007-12-12', 'Couleur', '5.1', 0,'Star Wars', 'La Revanche Des Sites Web')
+insert into Edition
+values ('Collector',2013,120,10,'Bluray','2013-12-01','Couleur','5.1', 0,'The Hobbit', 'La désolation de Smaug')
+
+insert into RATTACHER 
+values (0,'anglais',1);
+insert into RATTACHER 
+values (0,'francais',1);
+insert into RATTACHER 
+values (0,'Russe',2);
+insert into RATTACHER 
+values (0,'anglais',2);
+
+insert into AFFICHER 
+values (0,'anglais',1);
+insert into AFFICHER 
+values (0,'francais',1);
+insert into AFFICHER 
+values (0,'Russe',2);
+insert into AFFICHER 
+values (0,'anglais',2);
+
+-- Exemplaires
+
+insert into EXEMPLAIRES
+values ('2007-10-10',1,1,1,0,1);
+insert into EXEMPLAIRES
+values ('2007-10-10',1,1,0,0,1);
+insert into EXEMPLAIRES
+values ('2013-11-10',1,0,1,0,2);
+
+
+
+/* Locations*/	
+
+insert into LOCATIONS
+values ('2013-09-25 22:05:10',24,'2013-09-26 10:05:20','2013-09-27 02:21:30',1,1)
+insert into LOCATIONS
+values ('2013-08-15 22:05:10',24,'2013-08-15 22:05:10','2013-08-15 22:05:10',1,1)
+insert into LOCATIONS
+values ('2013-08-15 22:05:10',24,'2013-11-23 10:05:20','2013-11-21 10:05:20',1,2)
+
+PRINT 'Peuplement OK'
+
+
+
+
+
+
+
+
